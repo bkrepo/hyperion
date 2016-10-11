@@ -1,3 +1,4 @@
+INCLUDE (CheckIncludeFiles)
 
 # Define the current source locations
 SET(CURRENT_HEADER_DIR ${CMAKE_SOURCE_DIR}/include/grabber)
@@ -20,6 +21,11 @@ QT5_WRAP_CPP(AmlogicHEADERS_MOC ${AmlogicQT_HEADERS})
 else(ENABLE_QT5)
 QT4_WRAP_CPP(AmlogicHEADERS_MOC ${AmlogicQT_HEADERS})
 endif(ENABLE_QT5)
+
+CHECK_INCLUDE_FILES ("amcodec/amports/amstream.h" HAVE_AML_HEADER)
+IF (${HAVE_AML_HEADER})
+	ADD_DEFINITIONS( -DHAVE_AML_HEADER )
+ENDIF()
 
 add_library(amlogic-grabber
 	${AmlogicHEADERS}
