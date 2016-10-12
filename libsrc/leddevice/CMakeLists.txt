@@ -24,6 +24,7 @@ SET(Leddevice_QT_HEADERS
 	${CURRENT_SOURCE_DIR}/LedDeviceRawHID.h
 	${CURRENT_SOURCE_DIR}/LedDeviceFile.h
 	${CURRENT_SOURCE_DIR}/LedDeviceFadeCandy.h
+	${CURRENT_SOURCE_DIR}/LedDeviceOdlight.h
 )
 
 SET(Leddevice_HEADERS
@@ -63,6 +64,7 @@ SET(Leddevice_SOURCES
 	${CURRENT_SOURCE_DIR}/LedDeviceSedu.cpp
 	${CURRENT_SOURCE_DIR}/LedDeviceFile.cpp
 	${CURRENT_SOURCE_DIR}/LedDeviceFadeCandy.cpp
+	${CURRENT_SOURCE_DIR}/LedDeviceOdlight.cpp
 	${CURRENT_SOURCE_DIR}/LedDeviceUdp.cpp
 	${CURRENT_SOURCE_DIR}/LedDeviceUdpRaw.cpp
 	${CURRENT_SOURCE_DIR}/LedUdpDevice.cpp

@@ -120,6 +120,64 @@ int LedRs232Device::writeBytes(const unsigned size, const uint8_t * data)
 	return 0;
 }
 
+int LedRs232Device::readBytes(const unsigned size, uint8_t * data)
+{
+	if (_blockedForDelay)
+	{
+		return 0;
+	}
+
+	if (!_rs232Port.isOpen())
+	{
+		// try to reopen
+		int status = open();
+		if(status == -1){
+			// Try again in 3 seconds
+			int seconds = 3000;
+			_blockedForDelay = true;
+			QTimer::singleShot(seconds, this, SLOT(unblockAfterDelay()));
+			std::cout << "Device blocked for " << seconds << " ms" << std::endl;
+		}
+		return status;
+	}
+
+	try
+	{
+		_rs232Port.read(data, size);
+	}
+	catch (const serial::SerialException & serialExc)
+	{
+		// TODO[TvdZ]: Maybe we should limit the frequency of this error report somehow
+		std::cerr << "Serial exception caught while reading to device: " << serialExc.what() << std::endl;
+		std::cout << "Attempting to re-open the device." << std::endl;
+
+		// First make sure the device is properly closed
+		try
+		{
+			_rs232Port.close();
+		}
+		catch (const std::exception & e) {}
+
+		// Attempt to open the device and write the data
+		try
+		{
+			_rs232Port.open();
+			_rs232Port.read(data, size);
+		}
+		catch (const std::exception & e)
+		{
+			// We failed again, this not good, do nothing maybe in the next loop we have more success
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << "Unable to read to RS232 device (" << e.what() << ")" << std::endl;
+		return -1;
+	}
+
+	return 0;
+}
+
 void LedRs232Device::unblockAfterDelay()
 {
 	std::cout << "Device unblocked" << std::endl;

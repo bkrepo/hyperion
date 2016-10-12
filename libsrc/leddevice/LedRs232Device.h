@@ -46,6 +46,7 @@ protected:
 	 * @return Zero on succes else negative
 	 */
 	int writeBytes(const unsigned size, const uint8_t *data);
+	int readBytes(const unsigned size, uint8_t *data);
 
 private slots:
 	/// Unblock the device after a connection delay

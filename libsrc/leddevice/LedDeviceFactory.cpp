@@ -40,6 +40,7 @@
 #include "LedDeviceAtmo.h"
 #include "LedDeviceAdalightApa102.h"
 #include "LedDeviceAtmoOrb.h"
+#include "LedDeviceOdlight.h"
 
 #ifdef ENABLE_WS2812BPWM
 	#include "LedDeviceWS2812b.h"
@@ -199,6 +200,17 @@ LedDevice * LedDeviceFactory::construct(const Json::Value & deviceConfig)
 		deviceLightpack->open();
 
 		device = deviceLightpack;
+	}
+	else if (type == "odlight")
+	{
+		const std::string output = deviceConfig["output"].asString();
+		const unsigned rate      = deviceConfig["rate"].asInt();
+		const int delay_ms       = deviceConfig["delayAfterConnect"].asInt();
+
+		LedDeviceOdlight* deviceOdlight = new LedDeviceOdlight(output, rate, delay_ms);
+		deviceOdlight->open();
+
+		device = deviceOdlight;
 	}
 	else if (type == "paintpack")
 	{
